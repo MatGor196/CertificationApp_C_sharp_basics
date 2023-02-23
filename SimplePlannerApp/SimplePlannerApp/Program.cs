@@ -1,6 +1,6 @@
 ﻿using SimplePlannerApp;
 
-//Mateusz Goraj
+// Mateusz Goraj
 
 // STRUKTURA APLIKACJI
 // Nieskończona pętla zawiera menu, które przekierowuje do odpowiednich
