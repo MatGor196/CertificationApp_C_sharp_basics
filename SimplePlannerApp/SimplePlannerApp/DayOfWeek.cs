@@ -1,23 +1,18 @@
 ﻿namespace SimplePlannerApp
 {
     public class DayOfWeek : DayOfWeekBase
-        // Istnieje dokładnie 7 instancji tej klasy w liście w klasie Schedule
     {
         private readonly string dayFileName;
         public string DayName { get; private set; }
-        // Mimo że jest określony, odwołujemy się do dni raczej liczbami 0-6
 
         public List<TaskInShedule> ListOfTasks { get; private set; }
 
         public DayOfWeek(int numOfDay)
         {
-            // Ustawienie zmiennych
             DayName = ReturnDayNameFromNumber(numOfDay);
             dayFileName = DayName + ".txt";
             ListOfTasks = new List<TaskInShedule>();
 
-            // Jeśli istnieje plik odpowiadający danemu dniu
-            // zczytujemy z niego wszystkie zadania
             if (File.Exists(dayFileName))
             {
                 ReadMemoryFromFile();
@@ -25,8 +20,6 @@
         }
 
         public override void ModifyDay(List<TaskInShedule> newTasks)
-        // Zastępujemy listę zadań nową i zapisujemy ją do pliku
-        // Standardowa funkcja do modyfikowania list zadań w danych dniach
         {
             ListOfTasks = newTasks;
             WriteMemoryToFile();
@@ -43,8 +36,6 @@
         }
 
         private string ReturnDayNameFromNumber(int number)
-            // Istnieje tylko na potrzeby stworzenia nazwy pliku do zapisu
-            // zadań na dany dzień
         {
             switch (number) 
             {
@@ -68,10 +59,7 @@
         }
 
         private void ReadMemoryFromFile()
-            // Wczytanie zadań z pliku
         {
-            
-
             using (var readStream = File.OpenText(dayFileName))
             {
                 var line = readStream.ReadLine();
@@ -94,7 +82,6 @@
         }
 
         private void WriteMemoryToFile()
-            // Zapis zadań do pliku
         {
             using (var writeStream = new StreamWriter(dayFileName))
             {
@@ -109,7 +96,6 @@
             }
         }
 
-        // 2 funkcje do porównań zadań (potrzebne do ich sortowania)
         private int CompareTasksByHour(TaskInShedule task1, TaskInShedule task2)
         {
             if (task1.TaskHour == task2.TaskHour)

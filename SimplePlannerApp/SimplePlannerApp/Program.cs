@@ -1,32 +1,17 @@
 ﻿using SimplePlannerApp;
 
-//Mateusz Goraj
-
-// STRUKTURA APLIKACJI
-// Nieskończona pętla zawiera menu, które przekierowuje do odpowiednich
-// procedur odpowiedzialnych za opcje w aplikacji z głównego menu
-// Program zawiera 3 podstawowe klasy:
-// * Schedule - będzie istniała tylko 1 instancja na cały program
-// głównie przez jej metody wykonywane będą wszystkie operacje
-// * DayOfWeek - będzie 7 instancji znajdujących się na liście w Schedule,
-// będą one zawierać listy zadań z danego dnia
-// * TaskInShedule - klasa model danych zawierająca opis zadania, godzinę
-// wykonania i priorytet, tak by wygodnie można się było do nich odwoływać
-
 string user_name = GetUserName();
 Schedule schedule = new Schedule();
 
-// Główna pętla programu
 bool appRun = true;
 while (appRun)
 {
-    // Podstawowe menu
     Console.WriteLine($"Witaj {user_name}!");
     Console.WriteLine("Oto twój osobisty terminarz. Powiedz mi co chcesz zrobić:");
     Console.WriteLine();
 
     Console.WriteLine("1. Zobaczyć swój plan");
-    Console.WriteLine("2. Dodać lub zmienić plan na dany dzień tygodnia");
+    Console.WriteLine("2. Zmienić plan na dany dzień tygodnia");
     Console.WriteLine("3. Zresetować dzień lub cały plan");
     Console.WriteLine("4. Wybrać sposób segregowania zadań");
     Console.WriteLine("5. Wyjść z aplikacji");
@@ -39,12 +24,11 @@ while (appRun)
     {
         switch (choosenOption)
         {
-            // Nazwy powinny mówić same za siebie
             case 1:
                 DisplayPlan();
                 break;
             case 2:
-                AddToOrChangePlan();
+                ChangePlan();
                 break;
             case 3:
                 ResetDayOrPlan();
@@ -64,8 +48,6 @@ while (appRun)
 }
 
 void DisplayPlan()
-    // W tym miejscu przechodzimy przez wszystkie dni i przez wszystkie zadania w danych dniach
-    // by je wyświetlić
 {
     Console.Clear();
 
@@ -84,9 +66,8 @@ void DisplayPlan()
     Console.ReadLine();
 }
 
-void AddToOrChangePlan()
+void ChangePlan()
 {
-    // Menu zmiany planu
     Console.Clear();
     
     Console.WriteLine("Który dzień chcesz zmienić?");
@@ -103,7 +84,6 @@ void AddToOrChangePlan()
 
     string choosenDayStr = Console.ReadLine();
 
-    // Walidacja, czy jest możliwa konwersja wybranej opcji na int
     if(!int.TryParse(choosenDayStr, out int output))
     {
         Console.WriteLine("Nieprawidłowe dane wejściowe!");
@@ -111,7 +91,6 @@ void AddToOrChangePlan()
         return;
     }
     
-    // Obniżone o 1, żeby było zgodne z numeracją tablic
     int choosenDay = int.Parse(choosenDayStr) - 1;
 
     switch(choosenDay)
@@ -123,18 +102,14 @@ void AddToOrChangePlan()
         case 4:
         case 5:
         case 6:
-            // Podawanie zadań dla danego dnia (każdy indeksowany od 0 do 6)
             Console.Clear();
 
             Console.WriteLine("Podaj nowe zadania na ten dzień:");
             Console.WriteLine("(Jeśli chcesz zakończyć wpisz w opisie 'w')");
             Console.WriteLine();
 
-            // Lista na nowe zadania na dany dzień
             var newTasks = new List<TaskInShedule>();
 
-            // Zbieramy do pamięci nowe zadania od użytkownika
-            // i od razu dodajemy obiekty zadań do newTasks
             while (true)
             {
                 Console.Write("Podaj opis: ");
@@ -199,13 +174,11 @@ void AddToOrChangePlan()
                 Console.WriteLine();
             }
 
-            // Przekazujemy nową listę, by zastąpiła aktualną z danego dnia
             schedule.ChangeDay(choosenDay, newTasks);
             break;
         case 7:
             return;
         default:
-            // Walidacja zakresu
             Console.WriteLine("Nieprawidłowy zakres!");
             break;
     }
@@ -215,7 +188,6 @@ void AddToOrChangePlan()
 
 void ResetDayOrPlan()
 {
-    // Menu resetu
     Console.Clear();
 
     Console.WriteLine("Co chciałbyś zresetować?");
@@ -233,7 +205,6 @@ void ResetDayOrPlan()
 
     string choosenDayStr = Console.ReadLine();
 
-    // Walidacja resetu
     if (!int.TryParse(choosenDayStr, out int output))
     {
         Console.WriteLine("Nieprawidłowe dane wejściowe!");
@@ -253,7 +224,6 @@ void ResetDayOrPlan()
         case 4:
         case 5:
         case 6:
-            // Reset konkretnego dnia
             Console.Clear();
             Console.WriteLine("Czy na pewno zresetować ten dzień?");
             Console.Write("[t/n]: ");
@@ -272,7 +242,6 @@ void ResetDayOrPlan()
             }
             break;
         case 7:
-            // Reset tygodnia
             Console.Clear();
             Console.WriteLine("Wybrano reset tygodnia");
             Console.WriteLine("Aby kontynuować wpisz: 'reset'");
@@ -281,8 +250,6 @@ void ResetDayOrPlan()
 
             if (input == "reset")
             {
-                // Reset polega po prostu na zastapieniu wszystkich list zadań
-                // dla każdego dnia listami pustymi
                 schedule.ResetWeek();
                 Console.Clear();
                 Console.WriteLine("Pomyślnie zresetowano cały tydzień");
@@ -296,7 +263,6 @@ void ResetDayOrPlan()
         case 8:
             return;
         default:
-            // Walidacja zakresu
             Console.WriteLine("Nieprawidłowy zakres!");
             break;
     }
@@ -306,7 +272,6 @@ void ResetDayOrPlan()
 
 void ChooseSegregationWay()
 {
-    // Menu sortowania
     Console.Clear();
 
     Console.WriteLine("Czy zadania mają być segregowanie godzinowo, czy priorytetami?");
@@ -315,8 +280,6 @@ void ChooseSegregationWay()
 
     string input = Console.ReadLine();
 
-    // W zależności, czy użytkownik wybrał segregowanie z użyciem godzin, czy z użyciem
-    // priorytetów wybieramy właściwą funkcję
     switch (input)
     {
         case "g":
@@ -336,8 +299,6 @@ void ChooseSegregationWay()
 }
 
 string GetUserName()
-    // Tylko pobiera imię użytkownika z pliku, no chyba że nie istnieje,
-    // wtedy procedura pyta użytkownika o imię
 {
     string user_name;
 

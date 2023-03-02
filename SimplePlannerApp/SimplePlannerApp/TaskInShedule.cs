@@ -1,7 +1,6 @@
 ﻿namespace SimplePlannerApp
 {
     public class TaskInShedule
-        // Klasa model danych
     {
         public string TaskDescription { get; private set; }
         public int TaskHour { get; private set; }
